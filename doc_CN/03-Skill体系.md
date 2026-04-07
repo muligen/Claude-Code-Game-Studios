@@ -132,6 +132,7 @@
 | `/prototype` | 快速一次性原型验证机制（放宽标准，隔离工作区） |
 | `/art-bible` | 创建美术圣经 — 概念确定后的视觉方向指南 |
 | `/asset-spec` | 为指定系统生成素材规格 |
+| `/generate-art` | 调用图像生成 API 产出美术素材（支持百炼万相/DALL-E/Stability/本地SD/ComfyUI） |
 
 ---
 

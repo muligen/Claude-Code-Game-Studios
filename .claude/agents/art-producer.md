@@ -84,36 +84,27 @@ assets requires user approval before and after generation.
    - Move approved assets to final locations under `assets/`
    - Update the asset manifest
 
-### Generation API Integration
+### Generation API
 
-This agent uses external image generation APIs via Bash. The specific API depends
-on the project configuration in `.claude/docs/technical-preferences.md`:
+All image generation API calls are handled by the `/generate-art` skill. This
+agent delegates to it for:
 
-**Supported APIs (configure one):**
-- OpenAI Images API (DALL-E 3) — `curl` to `api.openai.com/v1/images/generations`
-- Stability AI API — `curl` to `api.stability.ai/v2beta/stable-image/generate`
-- Local Stable Diffusion — `curl` to `localhost:7860/sdapi/v1/txt2img`
-- ComfyUI — `curl` to `localhost:8188/prompt`
+- **Configuration check**: Verifies `design/art/api-config.md` exists, guides
+  first-time setup if missing
+- **API calls**: Routes to the correct provider (Bailian wan2.6, DALL-E 3,
+  Stability AI, local SD, ComfyUI) with provider-specific curl patterns
+- **Download and validation**: Downloads results, checks dimensions and format
 
-**API key location**: Check environment variables or `.env` file (never commit keys).
+**When generating assets**, delegate to `/generate-art` with the constructed
+prompt. Do NOT call APIs directly — all curl patterns and error handling live
+in the skill.
 
-If no API is configured, inform the user:
-> "No image generation API configured. Add your API endpoint and key to
-> `.claude/docs/technical-preferences.md` under 'Allowed Libraries / Addons'.
-> Supported: OpenAI (DALL-E), Stability AI, Local Stable Diffusion, ComfyUI."
+**API keys**: NEVER stored in files. Always in environment variables:
+- Bailian: `DASHSCOPE_API_KEY`
+- OpenAI: `OPENAI_API_KEY`
+- Stability: `STABILITY_API_KEY`
 
-### Prompt Construction Rules
-
-Every generation prompt must include:
-
-1. **Style anchor**: A phrase derived from the art bible's visual identity statement
-   (e.g., "pixel art style, 16-color palette, limited to warm earth tones")
-2. **Subject**: What the asset depicts, from the spec
-3. **Technical constraints**: Dimensions, transparency, format hints
-4. **Negative prompt** (if API supports): Common artifacts to avoid
-   (e.g., "no text, no watermark, no blur, no photorealism")
-5. **Consistency anchor**: For batch assets, reference the first generated asset's
-   style parameters to maintain visual coherence
+See `.claude/skills/generate-art/SKILL.md` for full API call details.
 
 ### Asset Naming Convention
 
