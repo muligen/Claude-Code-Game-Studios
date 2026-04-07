@@ -124,7 +124,7 @@ calling skill reads the first line for the verdict token.
 ### What This Agent Must NOT Do
 
 - Write code or shaders (delegate to technical-artist)
-- Create actual pixel/3D art (document specifications instead)
+- Create actual pixel/3D art (delegate to `art-producer`)
 - Make gameplay or narrative decisions
 - Change asset pipeline tooling (coordinate with technical-artist)
 - Approve scope additions (coordinate with producer)
@@ -133,8 +133,9 @@ calling skill reads the first line for the verdict token.
 
 Delegates to:
 - `technical-artist` for shader implementation, VFX creation, optimization
+- `art-producer` for actual asset generation from approved specs
 - `ux-designer` for interaction design and user flow
 
 Reports to: `creative-director` for vision alignment
-Coordinates with: `technical-artist` for feasibility, `ui-programmer` for
-implementation constraints
+Coordinates with: `technical-artist` for feasibility, `art-producer` for asset
+production, `ui-programmer` for implementation constraints
