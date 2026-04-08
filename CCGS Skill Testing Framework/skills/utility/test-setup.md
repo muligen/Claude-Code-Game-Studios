@@ -6,8 +6,7 @@
 configured engine. It creates the `tests/` directory structure defined in
 `coding-standards.md` (unit/, integration/, performance/, playtest/) and
 generates the appropriate test runner configuration for the detected engine:
-GdUnit4 config for Godot, Unity Test Runner asmdef for Unity, or Unreal headless
-runner for Unreal Engine.
+GdUnit4 config for Godot or Unity Test Runner asmdef for Unity.
 
 Each file or directory created is gated behind a "May I write" ask. If the test
 framework already exists, the skill verifies the configuration rather than
@@ -164,8 +163,6 @@ None. `/test-setup` is a scaffolding utility. No director gates apply.
 
 ## Coverage Notes
 
-- Unreal Engine test scaffolding (headless runner with `-nullrhi`) follows the
-  same pattern as Cases 1 and 2 and is not separately fixture-tested.
 - CI integration file generation (e.g., `.github/workflows/test.yml`) is
   referenced but not assertion-tested here — it may be a separate skill concern.
 - The case where tests/ exists but is from a different engine (e.g., Unity tests

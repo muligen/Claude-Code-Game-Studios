@@ -32,8 +32,8 @@ A test framework installed at sprint four costs 3 sprints.
    - Glob `tests/` — does the directory exist?
    - Glob `tests/unit/` and `tests/integration/` — do subdirectories exist?
    - Glob `.github/workflows/` — does a CI workflow file exist?
-   - Glob `tests/gdunit4_runner.gd` (Godot) or `tests/EditMode/` (Unity) or
-     `Source/Tests/` (Unreal) for engine-specific artifacts.
+   - Glob `tests/gdunit4_runner.gd` (Godot) or `tests/EditMode/` (Unity)
+     for engine-specific artifacts.
 
 3. **Report findings**:
    - "Engine: [engine]. Test directory: [found / not found]. CI workflow: [found / not found]."
@@ -87,7 +87,7 @@ After approval, create the following files:
 # Test Infrastructure
 
 **Engine**: [engine name + version]
-**Test Framework**: [GdUnit4 | Unity Test Framework | UE Automation]
+**Test Framework**: [GdUnit4 | Unity Test Framework]
 **CI**: `.github/workflows/tests.yml`
 **Setup date**: [date]
 
@@ -188,19 +188,6 @@ Window → General → Test Runner
 (Unity Test Framework is included by default in Unity 2019+)
 ```
 
-#### Unreal Engine (`Engine: Unreal` or `Engine: UE5`)
-
-Create `Source/Tests/README.md`:
-```markdown
-# Unreal Automation Tests
-Tests use the UE Automation Testing Framework.
-Run via: Session Frontend → Automation → select "MyGame." tests
-Or headlessly: UnrealEditor -nullrhi -ExecCmds="Automation RunTests MyGame.; Quit"
-
-Test class naming: F[SystemName]Test
-Test category naming: "MyGame.[System].[Feature]"
-```
-
 ---
 
 ## Phase 4: Create CI/CD Workflow
@@ -296,49 +283,6 @@ jobs:
 
 Note: Unity CI requires a `UNITY_LICENSE` secret. Add to GitHub repository
 secrets before the first CI run.
-
-### Unreal Engine
-
-Create `.github/workflows/tests.yml`:
-
-```yaml
-name: Automated Tests
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    name: Run UE Automation Tests
-    runs-on: self-hosted  # UE requires a local runner with the editor installed
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-
-      - name: Run Automation Tests
-        run: |
-          "$UE_EDITOR_PATH" "${{ github.workspace }}/[ProjectName].uproject" \
-            -nullrhi -nosound \
-            -ExecCmds="Automation RunTests MyGame.; Quit" \
-            -log -unattended
-        shell: bash
-
-      - name: Upload Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-logs
-          path: Saved/Logs/
-```
-
-Note: UE CI requires a self-hosted runner with Unreal Editor installed.
-Set the `UE_EDITOR_PATH` environment variable on the runner.
 
 ---
 

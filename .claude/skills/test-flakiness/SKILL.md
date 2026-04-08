@@ -52,8 +52,6 @@ Check `test-results/` for `.xml` files.
 For Unity projects: game-ci test runner outputs NUnit XML to `test-results/`
 by default.
 
-For Unreal projects: automation logs go to `Saved/Logs/`. Grep for
-`Result: Success` and `Result: Fail` patterns.
 
 ### Option B — Local log files
 
@@ -85,7 +83,6 @@ For each CI log or result file found, parse:
 **Plain text logs**:
 - Grep for pass/fail patterns:
   - Godot: `PASSED` / `FAILED` adjacent to test names
-  - Unreal: `Result: Success` / `Result: Fail`
   - Unity: `Test passed` / `Test failed`
 
 Build a table: `test_id → [run1_result, run2_result, run3_result, ...]`

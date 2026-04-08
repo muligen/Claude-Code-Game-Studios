@@ -12,13 +12,12 @@ visual quality, performance, and cross-platform compatibility.
 - File naming: `[type]_[category]_[name].[ext]`
   - `spatial_env_water.gdshader` (Godot)
   - `SG_Env_Water` (Unity Shader Graph)
-  - `M_Env_Water` (Unreal Material)
 - Use descriptive names that indicate the material purpose
 - Prefix with shader type: `spatial_`, `canvas_`, `particles_`, `post_`
 
 ## Code Quality
 - All uniforms/parameters must have descriptive names and appropriate hints
-- Group related parameters (Godot: `group_uniforms`, Unity: `[Header]`, Unreal: Category)
+- Group related parameters (Godot: `group_uniforms`, Unity: `[Header]`)
 - Comment non-obvious calculations (especially math-heavy sections)
 - No magic numbers — use named constants or documented uniform values
 - Include authorship and purpose comment at the top of each shader file
@@ -34,7 +33,7 @@ visual quality, performance, and cross-platform compatibility.
 ## Cross-Platform
 - Test shaders on minimum spec target hardware
 - Provide fallback/simplified versions for lower quality tiers
-- Document which render pipeline the shader targets (Forward/Deferred, URP/HDRP, Forward+/Mobile/Compatibility)
+- Document which render pipeline the shader targets (Forward/Deferred, URP/HDRP, Forward+/Mobile/Compatibility in Godot)
 - Do not mix shaders from different render pipelines in the same directory
 
 ## Variant Management

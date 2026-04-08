@@ -1213,9 +1213,7 @@ Tier 3 (Specialists):  gameplay-programmer, engine-programmer,
                        live-ops-designer, prototyper, security-engineer,
                        community-manager, godot-specialist,
                        godot-gdscript-specialist, godot-shader-specialist,
-                       unity-specialist, unity-csharp-specialist,
-                       unreal-specialist, unreal-blueprint-specialist,
-                       unreal-cpp-specialist
+                       unity-specialist, unity-csharp-specialist
 ```
 
 **Coordination rules:**
@@ -1380,11 +1378,6 @@ Reads existing code and generates GDD-format design documentation from it.
 | Unity shaders/VFX | `unity-shader-specialist` | 3 |
 | Unity Addressables | `unity-addressables-specialist` | 3 |
 | Unity UI Toolkit | `unity-ui-specialist` | 3 |
-| Unreal-specific help | `unreal-specialist` | 3 |
-| Unreal GAS | `ue-gas-specialist` | 3 |
-| Unreal Blueprints | `ue-blueprint-specialist` | 3 |
-| Unreal replication | `ue-replication-specialist` | 3 |
-| Unreal UMG/CommonUI | `ue-umg-specialist` | 3 |
 
 ### Agent Hierarchy
 

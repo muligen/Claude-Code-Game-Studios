@@ -98,13 +98,6 @@ If test result files exist (XML or JSON), read the most recent one and parse
 PASS/FAIL counts. If no artifacts exist: "Unity tests must be run from the
 editor or CI pipeline. Please confirm test status manually before proceeding."
 
-**Unreal Engine:**
-```bash
-ls -t Saved/Logs/ 2>/dev/null | grep -i "test\|automation" | head -5
-```
-If no matching log found: "UE automation tests must be run via the Session
-Frontend or CI pipeline. Please confirm test status manually."
-
 **Unknown engine / not configured:**
 "Engine not configured in `.claude/docs/technical-preferences.md`. Run
 `/setup-engine` to specify the engine, then re-run `/smoke-check`."

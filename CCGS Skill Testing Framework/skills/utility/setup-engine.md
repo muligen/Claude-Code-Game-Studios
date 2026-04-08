@@ -84,7 +84,7 @@ None. `/setup-engine` is a technical configuration skill. No director gates appl
 5. Skill asks "May I write to `technical-preferences.md`?" and writes on approval
 
 **Assertions:**
-- [ ] Engine field is set to Unity (not Godot or Unreal)
+- [ ] Engine field is set to Unity (not Godot)
 - [ ] Language field is set to C#
 - [ ] Naming conventions reflect C# conventions
 - [ ] Routing table includes `.cs` and `.unity` entries
@@ -92,31 +92,7 @@ None. `/setup-engine` is a technical configuration skill. No director gates appl
 
 ---
 
-### Case 3: Unreal + Blueprint — Unreal-specific configuration
-
-**Fixture:**
-- `technical-preferences.md` contains only placeholders
-- Engine argument provided: `unreal`
-
-**Input:** `/setup-engine unreal`
-
-**Expected behavior:**
-1. Skill sets engine to Unreal Engine 5, primary language to Blueprint (Visual Scripting)
-2. Specialist assignments reference unreal-specialist, blueprint-specialist
-3. Routing table: `.uasset` → blueprint-specialist or unreal-specialist,
-   `.umap` → unreal-specialist
-4. Performance budgets are pre-set with Unreal defaults (e.g., higher draw call budget)
-5. Skill asks "May I write" and writes on approval; verdict is COMPLETE
-
-**Assertions:**
-- [ ] Engine field is set to Unreal Engine 5
-- [ ] Routing table includes `.uasset` and `.umap` entries
-- [ ] Blueprint specialist is assigned
-- [ ] Verdict is COMPLETE
-
----
-
-### Case 4: Engine Already Configured — Offers to reconfigure specific sections
+### Case 3: Engine Already Configured — Offers to reconfigure specific sections
 
 **Fixture:**
 - `technical-preferences.md` has engine set to Godot 4 with all fields populated

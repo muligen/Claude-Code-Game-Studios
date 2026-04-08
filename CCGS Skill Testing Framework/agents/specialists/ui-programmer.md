@@ -56,7 +56,7 @@ No gate IDs assigned.
 **Input:** Engine context provided: project uses Godot 4.6 with Control node UI. Request: "Implement a scrollable item list for the inventory."
 **Expected behavior:**
 - Uses Godot's `ScrollContainer` + `VBoxContainer` + `ItemList` (or equivalent) pattern, not Canvas or UGUI
-- Does NOT produce Unity UGUI or Unreal UMG code for a Godot project
+- Does NOT produce Unity UGUI code for a Godot project
 - Checks the engine version reference (4.6) for any Control node API changes from 4.4/4.5 before using specific APIs
 - Produces GDScript or C# code consistent with the project's configured language
 

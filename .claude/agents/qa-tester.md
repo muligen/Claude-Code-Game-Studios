@@ -89,46 +89,6 @@ func test_[scenario]_[expected]() -> void:
 
 #### Unity (C# / NUnit)
 
-```csharp
-[TestFixture]
-public class [SystemName]Tests
-{
-    [Test]
-    public void [Scenario]_[Expected]()
-    {
-        // Arrange
-        var subject = new [ClassName]();
-
-        // Act
-        var result = subject.[Method]([args]);
-
-        // Assert
-        Assert.AreEqual([expected], result, delta: 0.001f);
-    }
-}
-```
-
-#### Unreal (C++)
-
-```cpp
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-    F[SystemName]Test,
-    "MyGame.[System].[Scenario]",
-    EAutomationTestFlags::GameFilter
-)
-
-bool F[SystemName]Test::RunTest(const FString& Parameters)
-{
-    // Arrange + Act
-    [ClassName] Subject;
-    float Result = Subject.[Method]([args]);
-
-    // Assert
-    TestEqual("[description]", Result, [expected]);
-    return true;
-}
-```
-
 **What to test for every Logic story formula:**
 1. Normal case (typical inputs → expected output)
 2. Zero/null input (should not crash; minimum output)

@@ -102,11 +102,6 @@ Engine-specific monitoring guidance:
 - Record: Total Reserved Memory (MB), GC Allocated (MB), Object Count at each checkpoint
 - Alert threshold: GC Allocated growing monotonically across 3+ checkpoints
 
-**Unreal Engine:**
-- Use `stat memory` console command at each checkpoint
-- Record: Physical Memory Used (MB), Physical Memory Available
-- Alert threshold: Physical Memory Used growth > 50MB over the full soak
-
 ### Stability observation items (if focus = stability or all)
 
 At each checkpoint, note:
@@ -149,7 +144,6 @@ Before starting the soak:
 - [ ] Performance monitoring tool open and recording:
   - **Godot**: Debugger → Monitors tab → Memory section visible
   - **Unity**: Memory Profiler window open
-  - **Unreal**: `stat memory` ready in console
 - [ ] Soak target confirmed: [session design intent from game concept]
 - [ ] Prior known issues to watch for: [from most recent playtest / qa-plan]
 

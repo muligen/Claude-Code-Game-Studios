@@ -36,7 +36,7 @@ If no engine is specified, run an interactive engine selection process:
 
 **Question 1 — Prior experience** (ask this first, always, via `AskUserQuestion`):
 - Prompt: "Have you worked in any of these engines before?"
-- Options: `Godot` / `Unity` / `Unreal Engine 5` / `Multiple — I'll explain` / `None of them`
+- Options: `Godot` / `Unity` / `Multiple — I'll explain` / `None of them`
 - If they pick a specific engine → recommend that engine. Prior experience outweighs all other factors. Confirm with them and skip the matrix.
 - If "None" or "Multiple" → continue to the questions below.
 
@@ -46,9 +46,9 @@ If no engine is specified, run an interactive engine selection process:
 - Prompt: "What platforms are you targeting for this game?"
 - Options: `PC (Steam / Epic)` / `Mobile (iOS / Android)` / `Console` / `Web / Browser` / `Multiple platforms`
 - Platform rules that feed directly into the recommendation:
-  - Mobile → Unity strongly preferred; Unreal is a poor fit; Godot is viable for simple mobile
-  - Console → Unity or Unreal; Godot console support requires third-party publishers or significant extra work
-  - Web → Godot exports cleanly to web; Unity WebGL is functional; Unreal has poor web support
+  - Mobile → Unity strongly preferred; Godot is viable for simple mobile
+  - Console → Unity; Godot console support requires third-party publishers or significant extra work
+  - Web → Godot exports cleanly to web; Unity WebGL is functional
   - PC only → all engines viable; other factors decide
   - Multiple → Unity is the most portable across PC/mobile/console
 
@@ -66,7 +66,7 @@ Do NOT use a simple scoring matrix that eliminates engines. Instead, reason thro
 
 **Godot 4**
 - Genuine strengths: 2D (best in class), stylized/indie 3D, rapid iteration, free forever (MIT), open source, gentlest learning curve, best for solo devs who want full control
-- Real limitations: 3D ecosystem is thin compared to Unity/Unreal (fewer tutorials, assets, community answers for 3D-specific problems); large open-world 3D is very hard and largely untested in Godot; console export requires third-party publishers or significant extra work; smaller professional job market
+- Real limitations: 3D ecosystem is thin compared to Unity (fewer tutorials, assets, community answers for 3D-specific problems); large open-world 3D is very hard and largely untested in Godot; console export requires third-party publishers or significant extra work; smaller professional job market
 - Licensing reality: Truly free with no revenue thresholds ever. MIT license means you own everything.
 - Best fit: 2D games of any scope; stylized/atmospheric 3D; contained 3D worlds (not open-world); first game projects where learning curve matters; projects where budget is a hard constraint at any scale
 
@@ -76,21 +76,14 @@ Do NOT use a simple scoring matrix that eliminates engines. Instead, reason thro
 - Licensing reality: Free under $200K revenue AND 200K installs (Unity Personal/Plus). Only becomes costly if the game is genuinely successful — most indie games never hit this threshold. The 2023 controversy is worth knowing about but the actual current terms are reasonable for most indie developers.
 - Best fit: Mobile games; mid-scope 3D; games targeting console; developers with C# background; projects needing large asset store; teams of 2-5
 
-**Unreal Engine 5**
-- Genuine strengths: Best-in-class 3D visuals (Lumen, Nanite, Chaos physics); industry standard for AAA and photorealistic 3D; large open-world support is mature and production-tested; Blueprint visual scripting lowers C++ barrier; strong for games targeting high-end PC or console
-- Real limitations: Steepest learning curve; heaviest editor (slow compile times, large project sizes); overkill for stylized/2D/small-scope games; C++ is genuinely hard; not suitable for mobile or web; 5% royalty past $1M gross revenue
-- Licensing reality: 5% royalty only applies AFTER $1M gross revenue per title. For a first game or any game that doesn't reach $1M, it costs nothing. This threshold is high enough that most indie developers will never pay it.
-- Best fit: AAA-quality 3D; large open-world games; photorealistic visuals; developers with C++ experience or willing to use Blueprint; games targeting high-end PC/console where visual fidelity is a core selling point
-
 **Genre-specific guidance** (factor this into the recommendation):
 - 2D any style → Godot strongly preferred
 - 3D stylized / atmospheric / contained world → Godot viable, Unity solid alternative
-- 3D open world (large, seamless) → Unity or Unreal; Godot is not production-proven for this
-- 3D photorealistic / AAA-quality → Unreal
+- 3D open world (large, seamless) → Unity; Godot is not production-proven for this
 - Mobile-first → Unity strongly preferred
-- Console-first → Unity or Unreal; Godot console support requires extra work
+- Console-first → Unity; Godot console support requires extra work
 - Horror / narrative / walking sim → any engine; match to art style and team experience
-- Action RPG / Soulslike → Unity or Unreal for 3D; community support and assets matter here
+- Action RPG / Soulslike → Unity for 3D; community support and assets matter here
 - Platformer 2D → Godot
 - Strategy / top-down / RTS → Godot or Unity depending on 2D vs 3D
 
@@ -159,14 +152,6 @@ Update the Technology Stack section, replacing the `[CHOOSE]` placeholders with 
 - **Asset Pipeline**: Unity Asset Import Pipeline + Addressables
 ```
 
-**For Unreal:**
-```markdown
-- **Engine**: Unreal Engine [version]
-- **Language**: C++ (primary), Blueprint (gameplay prototyping)
-- **Build System**: Unreal Build Tool (UBT)
-- **Asset Pipeline**: Unreal Content Pipeline
-```
-
 ---
 
 ## 5. Populate Technical Preferences
@@ -188,13 +173,6 @@ engine-appropriate defaults. Read the existing template first, then fill in:
 - Methods: PascalCase (e.g., `TakeDamage()`)
 - Files: PascalCase matching class (e.g., `PlayerController.cs`)
 - Constants: PascalCase or UPPER_SNAKE_CASE
-
-**For Unreal (C++):**
-- Classes: Prefixed PascalCase (`A` for Actor, `U` for UObject, `F` for struct)
-- Variables: PascalCase (e.g., `MoveSpeed`)
-- Functions: PascalCase (e.g., `TakeDamage()`)
-- Booleans: `b` prefix (e.g., `bIsAlive`)
-- Files: Match class without prefix (e.g., `PlayerController.h`)
 
 ### Input & Platform Section
 
@@ -268,29 +246,6 @@ Also populate the `## Engine Specialists` section in `technical-preferences.md` 
 | General architecture review | unity-specialist |
 ```
 
-**For Unreal:**
-```markdown
-## Engine Specialists
-- **Primary**: unreal-specialist
-- **Language/Code Specialist**: ue-blueprint-specialist (Blueprint graphs) or unreal-specialist (C++)
-- **Shader Specialist**: unreal-specialist (no dedicated shader specialist — primary covers materials)
-- **UI Specialist**: ue-umg-specialist (UMG widgets, CommonUI, input routing, widget styling)
-- **Additional Specialists**: ue-gas-specialist (Gameplay Ability System, attributes, gameplay effects), ue-replication-specialist (property replication, RPCs, client prediction, netcode)
-- **Routing Notes**: Invoke primary for C++ architecture and broad engine decisions. Invoke Blueprint specialist for Blueprint graph architecture and BP/C++ boundary design. Invoke GAS specialist for all ability and attribute code. Invoke replication specialist for any multiplayer or networked systems. Invoke UMG specialist for all UI implementation.
-
-### File Extension Routing
-
-| File Extension / Type | Specialist to Spawn |
-|-----------------------|---------------------|
-| Game code (.cpp, .h files) | unreal-specialist |
-| Shader / material files (.usf, .ush, Material assets) | unreal-specialist |
-| UI / screen files (.umg, UMG Widget Blueprints) | ue-umg-specialist |
-| Scene / prefab / level files (.umap, .uasset) | unreal-specialist |
-| Native extension / plugin files (Plugin .uplugin, modules) | unreal-specialist |
-| Blueprint graphs (.uasset BP classes) | ue-blueprint-specialist |
-| General architecture review | unreal-specialist |
-```
-
 ### Collaborative Step
 Present the filled-in preferences to the user. For Godot, include the chosen language and note where the full naming conventions and routing tables live:
 > "Here are the default technical preferences for [engine] ([language if Godot]). The naming conventions and specialist routing are in Appendix A of this skill — I'll apply the [GDScript/C#/Both] variant. Want to customize any of these, or shall I save the defaults?"
@@ -309,7 +264,6 @@ Check whether the engine version is likely beyond the LLM's training data.
 - LLM knowledge cutoff: **May 2025**
 - Godot: training data likely covers up to ~4.3
 - Unity: training data likely covers up to ~2023.x / early 6000.x
-- Unreal: training data likely covers up to ~5.3 / early 5.4
 
 Compare the user's chosen version against these baselines:
 
@@ -549,7 +503,7 @@ After setup is complete, output:
 Engine Setup Complete
 =====================
 Engine:          [name] [version]
-Language:        [GDScript | C# | GDScript + C# | C# | C++ + Blueprint]
+Language:        [GDScript | C# | GDScript + C# | C#]
 Knowledge Risk:  [LOW/MEDIUM/HIGH]
 Reference Docs:  [created/skipped]
 CLAUDE.md:       [updated]

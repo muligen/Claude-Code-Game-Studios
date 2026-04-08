@@ -127,16 +127,6 @@
 | `unity-addressables-specialist` | Addressable 分组、异步加载、内存管理、CDN |
 | `unity-ui-specialist` | UI Toolkit、UGUI Canvas、数据绑定、跨平台输入 |
 
-### Unreal Engine 5
-
-| Agent | 职责 |
-|-------|------|
-| `unreal-specialist` | UE5 总管：Blueprint vs C++、GAS 概览、UE 子系统 |
-| `ue-gas-specialist` | GAS：技能、效果、属性集、标签、预测 |
-| `ue-blueprint-specialist` | Blueprint 架构：BP/C++ 边界、图标准、优化 |
-| `ue-replication-specialist` | 网络：属性复制、RPC、预测、带宽优化 |
-| `ue-umg-specialist` | UI：UMG、CommonUI、控件层级、数据绑定 |
-
 ---
 
 ## 升级路径

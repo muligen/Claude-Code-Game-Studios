@@ -54,7 +54,7 @@ None. `/test-helpers` is a scaffolding utility. No director gates apply.
 4. File is written on approval; verdict is COMPLETE
 
 **Assertions:**
-- [ ] Generated helper is in GDScript (not C# or Blueprint)
+- [ ] Generated helper is in GDScript (not C#)
 - [ ] Factory function parameters use defaults matching GDD values
 - [ ] Helper uses dependency injection (no Autoload/singleton references)
 - [ ] Filename follows snake_case convention for GDScript
