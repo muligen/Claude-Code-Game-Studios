@@ -21,57 +21,113 @@ download, and validation.
 
 ---
 
-## Provider Scripts
+## Prerequisites
 
-Each provider has a standalone script in `.claude/skills/generate-art/scripts/`:
+**Python 3.8+** (bundled with macOS/Linux; install from python.org on Windows).
 
-| Provider | Script | Env Var | Sizes |
-|----------|--------|---------|-------|
-| 阿里云百炼万相2.6 | `bailian-wanx.sh` | `DASHSCOPE_API_KEY` | `1280*1280`, `1280*720`, `720*1280`, `1280*960`, `960*1280`, `1200*800`, `800*1200`, `1344*576` |
-| OpenAI DALL-E 3 | `openai-dalle.sh` | `OPENAI_API_KEY` | `1024x1024`, `1792x1024`, `1024x1792` |
-| Stability AI | `stability.sh` | `STABILITY_API_KEY` | aspect ratios: `1:1`, `16:9`, `9:16`, `4:3`, `3:4`, `3:2` |
-| Local SD WebUI | `local-sd.sh` | (none) | custom WxH |
-| ComfyUI | `comfyui.sh` | (none) | custom WxH，支持自定义工作流 JSON |
+Install dependencies:
+```bash
+pip install -r .claude/skills/generate-art/requirements.txt
+```
 
-**To call a provider**: Read the script file first (to get exact usage), then
-execute via Bash. Scripts handle all HTTP details, polling, and download.
+Only one external package:
+- **Pillow** — for image dimension/format validation (Phase 3). The generation
+  script itself uses only Python stdlib (`urllib`, `json`, `base64`).
+
+**If Pillow is not installed**, generation still works — only the Phase 3
+validation step (checking dimensions) will be skipped.
 
 ---
 
-## Configuration File
+## Generation Script
 
-`design/art/api-config.md` — records provider choice and non-secret settings.
-API keys are **never** in files; always in environment variables.
+A single cross-platform Python script handles all providers:
+
+`.claude/skills/generate-art/scripts/generate_art.py`
+
+| Provider | CLI name | Env Var | Key Options |
+|----------|----------|---------|-------------|
+| Alibaba Cloud Bailian wan2.6 | `bailian` | `DASHSCOPE_API_KEY` | `--size` (1280*1280 etc), `--region` (beijing/singapore/virginia) |
+| OpenAI DALL-E 3 | `openai` | `OPENAI_API_KEY` | `--size` (1024x1024, 1792x1024, 1024x1792) |
+| Stability AI | `stability` | `STABILITY_API_KEY` | `--aspect` (1:1, 16:9, 9:16, 4:3, 3:4, 3:2) |
+| Local SD WebUI | `local-sd` | (none) | `--width`, `--height` |
+| ComfyUI | `comfyui` | (none) | `--width`, `--height`, `--workflow` |
+
+**To generate**: Execute via Bash:
+```bash
+python .claude/skills/generate-art/scripts/generate_art.py <provider> "<prompt>" "<output-path>" [options]
+```
+
+Example (Bailian):
+```bash
+python .claude/skills/generate-art/scripts/generate_art.py bailian "pixel art character, warrior, 32x32" "assets/art/sprites/char_warrior_01.png" --size "1280*1280"
+```
+
+Example (DALL-E):
+```bash
+python .claude/skills/generate-art/scripts/generate_art.py openai "pixel art character, warrior, 32x32" "assets/art/sprites/char_warrior_01.png" --size "1024x1024"
+```
+
+Example (ComfyUI with custom workflow):
+```bash
+python .claude/skills/generate-art/scripts/generate_art.py comfyui "pixel art warrior" "assets/art/sprites/warrior.png" --width 512 --height 512 --workflow "design/art/comfyui-pixel-workflow.json"
+```
+
+---
+
+## API Key Configuration (.env)
+
+API keys are stored in `.claude/skills/generate-art/.env` (gitignored).
+
+**Setup**: Copy the example and fill in keys:
+```bash
+cp .claude/skills/generate-art/.env.example .claude/skills/generate-art/.env
+# Edit .env and fill in your API key
+```
+
+The script auto-loads `.env` on startup. Keys can also be set as environment
+variables (env vars take precedence over .env).
+
+---
+
+## Non-Secret Configuration
+
+`design/art/api-config.md` — records provider choice and region/endpoint.
+API keys are **never** in files tracked by git.
 
 ---
 
 ## Phase 1: Check Configuration
 
-Before any generation, read `design/art/api-config.md`.
+Before any generation:
+
+1. Check dependencies: `python -c "import PIL; print('OK')"` — if missing, run:
+   `pip install -r .claude/skills/generate-art/requirements.txt`
+2. Read `design/art/api-config.md` for provider selection
+3. Check `.env` or env var for the corresponding API key
 
 ### Config missing → Guided Setup
 
 Use `AskUserQuestion`:
 
 ```
-=== 图像生成 API 配置 ===
+=== Image Generation API Configuration ===
 
-需要配置一个图像生成 API 才能生成美术素材。请选择：
+Choose an image generation API:
 
-1. 阿里云百炼万相2.6（推荐中国用户）— 需要 DASHSCOPE_API_KEY
-2. OpenAI DALL-E 3 — 需要 OPENAI_API_KEY
-3. Stability AI — 需要 STABILITY_API_KEY
-4. 本地 Stable Diffusion WebUI — 无需 API Key
-5. ComfyUI — 无需 API Key
-6. 稍后配置
+1. Alibaba Cloud Bailian wan2.6 (recommended for China) — needs DASHSCOPE_API_KEY
+2. OpenAI DALL-E 3 — needs OPENAI_API_KEY
+3. Stability AI — needs STABILITY_API_KEY
+4. Local Stable Diffusion WebUI — no API key needed
+5. ComfyUI — no API key needed
+6. Set up later
 ```
 
-After selection, ask for required info:
-- **Bailian**: set `DASHSCOPE_API_KEY`, choose region (北京/新加坡/弗吉尼亚)
-- **OpenAI**: set `OPENAI_API_KEY`
-- **Stability**: set `STABILITY_API_KEY`
-- **Local SD**: endpoint URL (default `http://localhost:7860`)
-- **ComfyUI**: endpoint URL (default `http://localhost:8188`)
+After selection:
+- Guide user to copy `.env.example` to `.env` and fill in the key
+- For Bailian: also ask region (beijing/singapore/virginia)
+- For Local SD: ask endpoint URL (default http://localhost:7860)
+- For ComfyUI: ask endpoint URL (default http://localhost:8188)
 
 Create `design/art/api-config.md`:
 
@@ -86,21 +142,20 @@ Create `design/art/api-config.md`:
 [Provider-specific non-secret settings: region, endpoint URL]
 
 ## Usage Notes
-- API keys in env vars only, never committed to git
+- API keys in .env file or env vars, never committed to git
 - /generate-art status → verify config
 - /generate-art setup → change provider
 ```
 
-### Verify env var
+### Verify API key
 
 ```bash
-echo $DASHSCOPE_API_KEY  # or OPENAI_API_KEY, STABILITY_API_KEY
+python -c "from pathlib import Path; p=Path('.claude/skills/generate-art/.env'); print('FOUND' if p.exists() else 'MISSING')"
 ```
 
-If not set:
-> 环境变量 `[VAR_NAME]` 未设置。请先设置：
-> - 临时：`export DASHSCOPE_API_KEY=sk-xxx`
-> - 永久：添加到 `~/.bashrc` 或 `~/.zshrc`
+If key not configured:
+> API key not found. Please edit `.claude/skills/generate-art/.env` and fill in your key.
+> Or set the environment variable directly.
 
 Do NOT proceed until the key is confirmed.
 
@@ -108,26 +163,14 @@ Do NOT proceed until the key is confirmed.
 
 ## Phase 2: Generate Image
 
-Read the provider from `design/art/api-config.md`, then:
+Read the provider from `design/art/api-config.md`, then execute:
 
-1. **Read the matching script** from `.claude/skills/generate-art/scripts/`
-2. **Execute** via Bash with: `bash <script-path> "<prompt>" "<output-path>" [size] [negative-prompt]`
-3. **Wait for completion** — scripts handle polling and download internally
-
-Example (Bailian):
 ```bash
-bash .claude/skills/generate-art/scripts/bailian-wanx.sh "pixel art character, warrior, 32x32" "assets/art/sprites/char_warrior_01_32x32.png" "1280*1280"
+python .claude/skills/generate-art/scripts/generate_art.py <provider> "<prompt>" "<output-path>" [options]
 ```
 
-Example (DALL-E):
-```bash
-bash .claude/skills/generate-art/scripts/openai-dalle.sh "pixel art character, warrior, 32x32" "assets/art/sprites/char_warrior_01_32x32.png" "1024x1024"
-```
-
-Example (ComfyUI with custom workflow):
-```bash
-bash .claude/skills/generate-art/scripts/comfyui.sh "pixel art warrior" "assets/art/sprites/warrior.png" 512 512 "" "design/art/comfyui-pixel-workflow.json"
-```
+The script handles all HTTP details, polling, download, and validation internally.
+Wait for completion — async providers (Bailian, ComfyUI) may take 1-10 minutes.
 
 ---
 
@@ -136,7 +179,7 @@ bash .claude/skills/generate-art/scripts/comfyui.sh "pixel art warrior" "assets/
 After script completes:
 
 1. **File exists** and non-zero size
-2. **Dimensions** — `python3 -c "from PIL import Image; print(Image.open('PATH').size)"`
+2. **Dimensions** — `python -c "from PIL import Image; print(Image.open('PATH').size)"`
 3. **Format** — PNG for game assets (transparency)
 
 If validation fails, report and offer retry.
@@ -145,14 +188,14 @@ If validation fails, report and offer retry.
 
 ## Status Mode
 
-Read config and check env var:
+Read config and check .env:
 
 ```
 === Image Generation API Status ===
 Provider: [name]
 Env Var: [VAR_NAME] — [SET / NOT SET]
-Endpoint: [URL]
 Config file: [EXISTS / MISSING]
+.env file: [EXISTS / MISSING]
 
 Ready: [YES / NO — reason]
 ```
@@ -181,9 +224,9 @@ Every prompt must include:
 
 | Error | Action |
 |-------|--------|
-| API key not set | Show setup instructions, do not retry |
-| 401/403 | Key invalid, ask user to update env var |
+| API key not set | Show .env setup instructions, do not retry |
+| 401/403 | Key invalid, ask user to update .env |
 | 429 | Rate limited, wait 30s, retry once |
 | Task FAILED | Read error, adjust prompt, retry once |
 | Download fails | Retry download up to 3 times |
-| Image URL expired (24h) | Re-run generation |
+| Network error | Check endpoint URL, suggest troubleshooting |

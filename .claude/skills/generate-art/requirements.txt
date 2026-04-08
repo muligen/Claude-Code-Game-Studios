@@ -1,0 +1,5 @@
+# CCGS Generate Art — Python Dependencies
+# Install: pip install -r .claude/skills/generate-art/requirements.txt
+
+# Image validation (optional — used for dimension/format checks in Phase 3)
+Pillow>=10.0
